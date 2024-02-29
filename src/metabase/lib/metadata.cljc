@@ -8,7 +8,7 @@
    [metabase.lib.util :as lib.util]
    [metabase.util.malli :as mu]))
 
-;;; TODO -- deprecate all the schemas below, and just use the versions in [[lib.schema.metadata]] instead.
+;;; TODO -- remove all the schemas below, and just use the versions in [[lib.schema.metadata]] instead (#39334)
 
 ;;; Column vs Field?
 ;;;

@@ -43,7 +43,7 @@
 
 (mbql-clause/define-mbql-clause-with-schema-fn (tuple-clause-of-comparables-schema #{[0 1] [0 2]})
   :between :- :type/Boolean
-  ;; TODO -- should we enforce that min is <= max (for literal number values?)
+  ;; TODO -- should we enforce that min is <= max (for literal number values?) (#39342)
   #_expr [:ref ::expression/orderable]
   #_min  [:ref ::expression/orderable]
   #_max  [:ref ::expression/orderable])
@@ -52,7 +52,7 @@
 (mbql-clause/define-mbql-clause-with-schema-fn (tuple-clause-of-comparables-schema #{[0 2] [0 4] [1 3] [1 5]})
   :inside :- :type/Boolean
   ;; TODO -- should we enforce that lat-min <= lat-max and lon-min <= lon-max? Should we enforce that -90 <= lat 90
-  ;; and -180 <= lon 180 ?? (for literal number values)
+  ;; and -180 <= lon 180 ?? (for literal number values) (#39342)
   #_lat-expr [:ref ::expression/orderable]
   #_lon-expr [:ref ::expression/orderable]
   #_lat-max  [:ref ::expression/orderable]  ; north

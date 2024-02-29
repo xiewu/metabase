@@ -62,7 +62,7 @@
       (log/debugf "Already fetched %s: %s" metadata-type (pr-str (sort (set/intersection (set ids) existing-ids))))
       (when (seq missing-ids)
         (log/debugf "Need to fetch %s: %s" metadata-type (pr-str (sort missing-ids)))
-        ;; TODO -- we should probably store `::nil` markers for things we tried to fetch that didn't exist
+        ;; TODO -- we should probably store `::nil` markers for things we tried to fetch that didn't exist (#39326)
         (doseq [instance (lib.metadata.protocols/bulk-metadata uncached-provider metadata-type missing-ids)]
           (store-in-cache! cache [metadata-type (:id instance)] instance))))
     (for [id ids]

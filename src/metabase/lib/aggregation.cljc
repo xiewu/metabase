@@ -180,7 +180,7 @@
 
 ;;; we don't currently have sophisticated logic for generating nice display names for filter clauses.
 ;;;
-;;; TODO : wait a minute, we do have that stuff now!
+;;; TODO : wait a minute, we do have that stuff now! (#39355)
 
 (defmethod lib.metadata.calculation/display-name-method :sum-where
   [query stage-number [_sum-where _opts x _pred] style]

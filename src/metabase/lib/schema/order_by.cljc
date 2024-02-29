@@ -22,6 +22,6 @@
     (fn [[tag]]
       (#{:asc :desc} tag))]])
 
-;;; TODO -- should there be a no-duplicates constraint here?
+;;; TODO -- should there be a no-duplicates constraint here? (#39384)
 (mr/def ::order-bys
   [:sequential {:min 1} [:ref ::order-by]])

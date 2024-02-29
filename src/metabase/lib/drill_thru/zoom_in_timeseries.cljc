@@ -49,7 +49,7 @@
    [metabase.shared.util.i18n :as i18n]
    [metabase.util.malli :as mu]))
 
-;;; TODO -- we shouldn't include hour and minute for `:type/Date` columns.
+;;; TODO -- we shouldn't include hour and minute for `:type/Date` columns. (#39366)
 (def ^:private valid-current-units
   [:year :quarter :month :week :day :hour :minute])
 
