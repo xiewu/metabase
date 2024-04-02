@@ -5,9 +5,7 @@ import { t } from "ttag";
 import { useSetting } from "metabase/common/hooks";
 import EntityMenu from "metabase/components/EntityMenu";
 import BookmarkToggle from "metabase/core/components/BookmarkToggle";
-import Button from "metabase/core/components/Button";
 import Tooltip from "metabase/core/components/Tooltip";
-import { color } from "metabase/lib/colors";
 import { useDispatch, useSelector } from "metabase/lib/redux";
 import * as Urls from "metabase/lib/urls";
 import { canUseMetabotOnDatabase } from "metabase/metabot/utils";
@@ -74,6 +72,7 @@ export const QuestionActions = ({
   onModelPersistenceChange,
 }: Props) => {
   const [uploadMode, setUploadMode] = useState<UploadMode>(UploadMode.append);
+  const [opened, setOpened] = useState(false);
   const isMetabotEnabled = useSetting("is-metabot-enabled");
   const canUpload = useSelector(canUploadToQuestion(question));
 
@@ -82,10 +81,6 @@ export const QuestionActions = ({
   const dispatch = useDispatch();
 
   const dispatchSoftReloadCard = () => dispatch(softReloadCard());
-
-  const infoButtonColor = isShowingQuestionInfoSidebar
-    ? color("brand")
-    : undefined;
 
   const isQuestion = question.type() === "question";
   const isModel = question.type() === "model";
@@ -261,6 +256,9 @@ export const QuestionActions = ({
   return (
     <>
       <QuestionActionsDivider />
+      <ActionIcon>
+        <Icon name="bookmark" color="brand" />
+      </ActionIcon>
       <ViewHeaderIconButtonContainer>
         <BookmarkToggle
           onCreateBookmark={handleBookmark}
@@ -288,34 +286,31 @@ export const QuestionActions = ({
             style={{ display: "none" }}
           />
           <Tooltip tooltip={t`Upload data to this model`}>
-            <ViewHeaderIconButtonContainer>
-              <Menu position="bottom-end">
-                <Menu.Target>
-                  <Button
-                    onlyIcon
-                    icon="upload"
-                    iconSize={HEADER_ICON_SIZE}
-                    color={infoButtonColor}
-                    data-testid="qb-header-append-button"
-                  />
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item
-                    icon={<Icon name="add" />}
-                    onClick={() => handleUploadClick(UploadMode.append)}
-                  >
-                    {t`Append data to this model`}
-                  </Menu.Item>
+            <Menu opened={opened} onChange={setOpened} position="bottom-end">
+              <Menu.Target>
+                <ActionIcon
+                  variant={opened ? "filled" : "transparent"}
+                  data-testid="qb-header-append-button"
+                >
+                  <Icon name="upload" size={HEADER_ICON_SIZE} />
+                </ActionIcon>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item
+                  icon={<Icon name="add" />}
+                  onClick={() => handleUploadClick(UploadMode.append)}
+                >
+                  {t`Append data to this model`}
+                </Menu.Item>
 
-                  <Menu.Item
-                    icon={<Icon name="refresh" />}
-                    onClick={() => handleUploadClick(UploadMode.replace)}
-                  >
-                    {t`Replace all data in this model`}
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            </ViewHeaderIconButtonContainer>
+                <Menu.Item
+                  icon={<Icon name="refresh" />}
+                  onClick={() => handleUploadClick(UploadMode.replace)}
+                >
+                  {t`Replace all data in this model`}
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
           </Tooltip>
         </>
       )}
