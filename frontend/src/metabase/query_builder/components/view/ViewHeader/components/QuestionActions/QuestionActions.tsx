@@ -21,7 +21,7 @@ import { trackTurnIntoModelClicked } from "metabase/query_builder/analytics";
 import { MODAL_TYPES } from "metabase/query_builder/constants";
 import { uploadFile } from "metabase/redux/uploads";
 import { getUserIsAdmin } from "metabase/selectors/user";
-import { Icon, Menu } from "metabase/ui";
+import { ActionIcon, Icon, Menu } from "metabase/ui";
 import * as Lib from "metabase-lib";
 import type Question from "metabase-lib/v1/Question";
 import {
@@ -269,16 +269,13 @@ export const QuestionActions = ({
         />
       </ViewHeaderIconButtonContainer>
       <Tooltip tooltip={t`More info`}>
-        <ViewHeaderIconButtonContainer>
-          <Button
-            onlyIcon
-            icon="info"
-            iconSize={HEADER_ICON_SIZE}
-            onClick={onInfoClick}
-            color={infoButtonColor}
-            data-testid="qb-header-info-button"
-          />
-        </ViewHeaderIconButtonContainer>
+        <ActionIcon
+          variant={isShowingQuestionInfoSidebar ? "filled" : "transparent"}
+          onClick={onInfoClick}
+          data-testid="qb-header-info-button"
+        >
+          <Icon name="info" size={HEADER_ICON_SIZE} />
+        </ActionIcon>
       </Tooltip>
       {canAppend && (
         <>
