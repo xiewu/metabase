@@ -7,6 +7,7 @@
    [metabase.lib.schema.common :as common]
    [metabase.lib.schema.expression :as expression]
    [metabase.lib.schema.mbql-clause :as mbql-clause]
+   [metabase.lib.util.numeric-tower :as lib.util.numeric-tower]
    [metabase.shared.util.internal.time-common :as shared.ut.common]
    [metabase.util.malli.registry :as mr]))
 
@@ -18,21 +19,13 @@
   [_bool]
   :type/Boolean)
 
-(defn- big-int? [x]
-  #?(:clj
-     (or (instance? java.math.BigInteger x)
-         (instance? clojure.lang.BigInt x))
-
-     :cljs
-     (metabase.lib.schema.literal.js/big-int? x)))
-
 (mr/def ::big-int
   #?(:clj  :metabase.lib.schema.literal.jvm/big-integer
      :cljs :metabase.lib.schema.literal.js/big-integer))
 
 (mr/def ::integer
   [:multi
-   {:dispatch big-int?}
+   {:dispatch #(boolean (lib.util.numeric-tower/big-int? %))}
    [true  ::big-int]
    [false :int]])
 

@@ -9,6 +9,7 @@
    [clojure.walk :as walk]
    [flatland.ordered.map :refer [ordered-map]]
    [medley.core :as m]
+   [metabase.lib.util.numeric-tower :as lib.util.numeric-tower]
    [metabase.shared.util.i18n :refer [tru] :as i18n]
    [metabase.shared.util.namespaces :as u.ns]
    [metabase.util.format :as u.format]
@@ -23,8 +24,7 @@
               [metabase.util.jvm :as u.jvm]
               [metabase.util.string :as u.str]
               [potemkin :as p]
-              [ring.util.codec :as codec])
-       :cljs ([metabase.lib.schema.literal.js])))
+              [ring.util.codec :as codec])))
   #?(:clj (:import
            (clojure.lang Reflector)
            (java.text Normalizer Normalizer$Form)
@@ -808,23 +808,20 @@
   off of `type` in pure Clojure."
   [x]
   (cond
-    (nil? x)        :dispatch-type/nil
-    (boolean? x)    :dispatch-type/boolean
-    (string? x)     :dispatch-type/string
-    (keyword? x)    :dispatch-type/keyword
-    (integer? x)    :dispatch-type/integer
-    (number? x)     :dispatch-type/number
-    (map? x)        :dispatch-type/map
-    (sequential? x) :dispatch-type/sequential
-    (set? x)        :dispatch-type/set
-    (symbol? x)     :dispatch-type/symbol
-    (fn? x)         :dispatch-type/fn
-    (regexp? x)     :dispatch-type/regex
-    ;; JS-only mappings
-    #?@(:cljs
-        ((metabase.lib.schema.literal.js/big-int? x) :dispatch-type/integer))
+    (nil? x)                            :dispatch-type/nil
+    (boolean? x)                        :dispatch-type/boolean
+    (string? x)                         :dispatch-type/string
+    (keyword? x)                        :dispatch-type/keyword
+    (lib.util.numeric-tower/integer? x) :dispatch-type/integer
+    (lib.util.numeric-tower/number? x)  :dispatch-type/number
+    (map? x)                            :dispatch-type/map
+    (sequential? x)                     :dispatch-type/sequential
+    (set? x)                            :dispatch-type/set
+    (symbol? x)                         :dispatch-type/symbol
+    (fn? x)                             :dispatch-type/fn
+    (regexp? x)                         :dispatch-type/regex
     ;; we should add more mappings here as needed
-    :else           :dispatch-type/*))
+    :else                               :dispatch-type/*))
 
 (defn assoc-dissoc
   "Called like `(assoc m k v)`, this does [[assoc]] if `(some? v)`, and [[dissoc]] if not.

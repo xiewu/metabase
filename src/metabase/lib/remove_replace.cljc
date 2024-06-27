@@ -1,4 +1,5 @@
 (ns metabase.lib.remove-replace
+  (:refer-clojure :exclude [integer?])
   (:require
    [clojure.set :as set]
    [clojure.walk :as walk]
@@ -16,6 +17,7 @@
    [metabase.lib.schema :as lib.schema]
    [metabase.lib.util :as lib.util]
    [metabase.lib.util.match :as lib.util.match]
+   [metabase.lib.util.numeric-tower :refer [integer?]]
    [metabase.util :as u]
    [metabase.util.malli :as mu]
    [metabase.util.malli.registry :as mr]))

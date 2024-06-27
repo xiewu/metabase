@@ -896,7 +896,12 @@
     ;; eventually we should do this for the whole codebase, but the args are in the opposite order so switching them
     ;; all at once isn't trivial, at least we can stop using it in new code.
     :discouraged-var
-    {medley.core/map-keys    {:message "Use clojure.core/update-keys"}
+    {clojure.core/bigint     {:message "Use metabase.lib.util.numeric-tower/bigint instead of clojure.core/bigint"}
+     clojure.core/integer?   {:message "Use metabase.lib.util.numeric-tower/integer? instead of clojure.core/integer?"}
+     clojure.core/neg-int?   {:message "Use metabase.lib.util.numeric-tower/neg-int? instead of clojure.core/neg-int?"}
+     clojure.core/number?    {:message "Use metabase.lib.util.numeric-tower/number? instead of clojure.core/number?"}
+     clojure.core/pos-int?   {:message "Use metabase.lib.util.numeric-tower/pos-int? instead of clojure.core/pos-int?"}
+     medley.core/map-keys    {:message "Use clojure.core/update-keys"}
      medley.core/map-vals    {:message "Use clojure.core/update-vals"}
      metabase.test/with-temp {:message "Don't use application database inside MLv2 code"}}
 

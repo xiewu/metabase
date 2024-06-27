@@ -3,6 +3,7 @@
 
   Drill-thrus are not part of MBQL; they are a set of actions one can take to transform a query.
   For example, adding a filter like `created_at < 2022-01-01`, or following a foreign key."
+  (:refer-clojure :exclude [number?])
   (:require
    [metabase.lib.schema :as-alias lib.schema]
    [metabase.lib.schema.aggregation :as lib.schema.aggregation]
@@ -15,8 +16,8 @@
    [metabase.lib.schema.metadata :as lib.schema.metadata]
    [metabase.lib.schema.order-by :as lib.schema.order-by]
    [metabase.lib.schema.ref :as lib.schema.ref]
-   [metabase.lib.schema.temporal-bucketing
-    :as lib.schema.temporal-bucketing]
+   [metabase.lib.schema.temporal-bucketing :as lib.schema.temporal-bucketing]
+   [metabase.lib.util.numeric-tower :refer [number?]]
    [metabase.util.malli.registry :as mr]))
 
 (mr/def ::pivot-types

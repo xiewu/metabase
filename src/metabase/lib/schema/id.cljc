@@ -1,5 +1,7 @@
 (ns metabase.lib.schema.id
+  (:refer-clojure :exclude [pos-int?])
   (:require
+   [metabase.lib.util.numeric-tower :refer [pos-int?]]
    [metabase.util.malli.registry :as mr]))
 
 ;;; these aren't anything special right now, but maybe in the future we can do something special/intelligent with
