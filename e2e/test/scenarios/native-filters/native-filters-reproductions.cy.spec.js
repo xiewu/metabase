@@ -979,7 +979,7 @@ describe("issue 29786", { tags: "@external" }, () => {
       FieldFilter.mapTo({ table: "Products", field: "Vendor" });
 
       filterWidget().first().click();
-      FieldFilter.addWidgetStringFilter("Widget");
+      FieldFilter.selectFilterValueFromList("Widget");
       filterWidget().last().click();
       FieldFilter.addWidgetStringFilter("Von-Gulgowski");
 
