@@ -964,36 +964,29 @@ describe("issue 29786", { tags: "@external" }, () => {
     cy.signInAsAdmin();
   });
 
-  it(
-    "should allow using field filters with null schema (metabase#29786)",
-    { tags: "@flaky" },
-    () => {
-      openNativeEditor({ databaseName: "QA MySQL8" });
-      SQLFilter.enterParameterizedQuery(SQL_QUERY);
+  it("should allow using field filters with null schema (metabase#29786)", () => {
+    openNativeEditor({ databaseName: "QA MySQL8" });
+    SQLFilter.enterParameterizedQuery(SQL_QUERY);
 
-      cy.findAllByTestId("variable-type-select").first().click();
-      SQLFilter.chooseType("Field Filter");
-      FieldFilter.mapTo({ table: "Products", field: "Category" });
+    cy.findAllByTestId("variable-type-select").first().click();
+    SQLFilter.chooseType("Field Filter");
+    FieldFilter.mapTo({ table: "Products", field: "Category" });
 
-      cy.findAllByTestId("variable-type-select").last().click();
-      SQLFilter.chooseType("Field Filter");
-      FieldFilter.mapTo({ table: "Products", field: "Vendor" });
+    cy.findAllByTestId("variable-type-select").last().click();
+    SQLFilter.chooseType("Field Filter");
+    FieldFilter.mapTo({ table: "Products", field: "Vendor" });
 
-      filterWidget().first().click();
-      FieldFilter.selectFilterValueFromList("Widget");
-      filterWidget().last().click();
-      FieldFilter.addWidgetStringFilter("Von-Gulgowski");
+    filterWidget().first().click();
+    FieldFilter.selectFilterValueFromList("Widget");
+    filterWidget().last().click();
+    FieldFilter.addWidgetStringFilter("Von-Gulgowski");
 
-      SQLFilter.runQuery();
-      cy.findByTestId("question-row-count").should(
-        "have.text",
-        "Showing 1 row",
-      );
-      cy.findAllByTestId("cell-data")
-        .should("be.visible")
-        .and("contain", "1087115303928");
-    },
-  );
+    SQLFilter.runQuery();
+    cy.findByTestId("question-row-count").should("have.text", "Showing 1 row");
+    cy.findAllByTestId("cell-data")
+      .should("be.visible")
+      .and("contain", "1087115303928");
+  });
 });
 
 describe("issue 31606", { tags: "@external" }, () => {
