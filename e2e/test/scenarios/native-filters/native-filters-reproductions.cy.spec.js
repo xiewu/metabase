@@ -974,6 +974,7 @@ describe("issue 29786", { tags: "@external" }, () => {
       cy.findAllByTestId("variable-type-select").first().click();
       SQLFilter.chooseType("Field Filter");
       FieldFilter.mapTo({ table: "Products", field: "Category" });
+
       cy.findAllByTestId("variable-type-select").last().click();
       SQLFilter.chooseType("Field Filter");
       FieldFilter.mapTo({ table: "Products", field: "Vendor" });
@@ -984,8 +985,13 @@ describe("issue 29786", { tags: "@external" }, () => {
       FieldFilter.addWidgetStringFilter("Von-Gulgowski");
 
       SQLFilter.runQuery();
-      // eslint-disable-next-line no-unscoped-text-selectors -- deprecated usage
-      cy.findByText("1087115303928").should("be.visible");
+      cy.findByTestId("question-row-count").should(
+        "have.text",
+        "Showing 1 row",
+      );
+      cy.findAllByTestId("cell-data")
+        .should("be.visible")
+        .and("contain", "1087115303928");
     },
   );
 });
