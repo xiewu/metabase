@@ -49,7 +49,6 @@ Current partner drivers:
 - [Ocient](https://github.com/Xeograph/metabase-ocient-driver)
 - [Starburst (compatible with Trino)](https://github.com/starburstdata/metabase-driver)
 
-
 Partner drivers are available to Cloud customers out-of-the-box.
 
 If you have interest in becoming a partner, please fill the [partner form](https://www.metabase.com/partners/join) and we will get in touch.
@@ -61,7 +60,7 @@ If you have interest in becoming a partner, please fill the [partner form](https
 Anyone can build a community driver. These are the currently known third-party database drivers for Metabase.
 
 | Database                                                                               | GitHub Stars                                                                                         | Last release (_if available_)                                                                                                |
-|----------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
 | [CSV](https://github.com/Markenson/csv-metabase-driver)                                | ![GitHub stars](https://img.shields.io/github/stars/Markenson/csv-metabase-driver)                   | ![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/Markenson/csv-metabase-driver)                   |
 | [Cube.js](https://github.com/lili-data/metabase-cubejs-driver)                         | ![GitHub stars](https://img.shields.io/github/stars/lili-data/metabase-cubejs-driver)                | ![GitHub (Pre-)Release Date](https://img.shields.io/github/release-date-pre/lili-data/metabase-cubejs-driver)                |
 | [DB2](https://github.com/damienchambe/metabase-db2-driver)                             | ![GitHub stars](https://img.shields.io/github/stars/damienchambe/metabase-db2-driver)                | ![Github (Pre-)Release Date](https://img.shields.io/github/release-date-pre/damienchambe/metabase-db2-driver)                |
