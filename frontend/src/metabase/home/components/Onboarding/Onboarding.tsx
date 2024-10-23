@@ -205,7 +205,7 @@ export const Onboarding = () => {
         >
           <Box mb={64}>
             <Title order={2} mb="lg">{t`Set up your ${applicationName}`}</Title>
-            <Accordion.Item value="database">
+            <Accordion.Item value="database" data-testid="database-item">
               <Accordion.Control icon={<Icon name="add_data" />}>
                 {t`Connect to your database`}
               </Accordion.Control>
@@ -232,7 +232,7 @@ export const Onboarding = () => {
                 </Stack>
               </Accordion.Panel>
             </Accordion.Item>
-            <Accordion.Item value="invite">
+            <Accordion.Item value="invite" data-testid="invite-item">
               <Accordion.Control icon={<Icon name="group" />}>
                 {t`Invite people`}
               </Accordion.Control>
@@ -279,7 +279,7 @@ export const Onboarding = () => {
 
           <Box mb={64}>
             <Title order={2} mb="lg">{t`Start visualizing your data`}</Title>
-            <Accordion.Item value="x-ray">
+            <Accordion.Item value="x-ray" data-testid="x-ray-item">
               <Accordion.Control icon={<Icon name="bolt" />}>
                 {t`Create automatic dashboards`}
               </Accordion.Control>
@@ -311,7 +311,7 @@ export const Onboarding = () => {
                 </Stack>
               </Accordion.Panel>
             </Accordion.Item>
-            <Accordion.Item value="notebook">
+            <Accordion.Item value="notebook" data-testid="notebook-item">
               <Accordion.Control icon={<Icon name="notebook" />}>
                 {t`Make an interactive chart with the query builder`}
               </Accordion.Control>
@@ -340,7 +340,7 @@ export const Onboarding = () => {
               </Accordion.Panel>
             </Accordion.Item>
 
-            <Accordion.Item value="sql">
+            <Accordion.Item value="sql" data-testid="sql-item">
               <Accordion.Control icon={<Icon name="sql" />}>
                 {t`Query with SQL`}
               </Accordion.Control>
@@ -377,7 +377,7 @@ export const Onboarding = () => {
                 </Stack>
               </Accordion.Panel>
             </Accordion.Item>
-            <Accordion.Item value="dashboard">
+            <Accordion.Item value="dashboard" data-testid="dashboard-item">
               <Accordion.Control icon={<Icon name="dashboard" />}>
                 {t`Create and filter a dashboard`}
               </Accordion.Control>
@@ -420,7 +420,10 @@ export const Onboarding = () => {
           </Box>
           <Box mb={64}>
             <Title order={2} mb="lg">{t`Get email updates and alerts`}</Title>
-            <Accordion.Item value="subscription">
+            <Accordion.Item
+              value="subscription"
+              data-testid="subscription-item"
+            >
               <Accordion.Control icon={<Icon name="subscription" />}>
                 {t`Get dashboard updates by email`}
               </Accordion.Control>
@@ -475,7 +478,7 @@ export const Onboarding = () => {
                 </Stack>
               </Accordion.Panel>
             </Accordion.Item>
-            <Accordion.Item value="alert">
+            <Accordion.Item value="alert" data-testid="alert-item">
               <Accordion.Control icon={<Icon name="alert" />}>
                 {t`Get alerts when metrics behave unexpectedly`}
               </Accordion.Control>
