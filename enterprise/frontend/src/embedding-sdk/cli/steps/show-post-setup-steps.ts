@@ -1,6 +1,8 @@
 import { select } from "@inquirer/prompts";
 import { green } from "chalk";
 
+import { checkIsInNextJsProject } from "embedding-sdk/cli/utils/check-nextjs-project";
+
 import {
   SDK_LEARN_MORE_MESSAGE,
   getMetabaseInstanceSetupCompleteMessage,
@@ -17,9 +19,11 @@ export const showPostSetupSteps: CliStepMethod = async state => {
   ${green("npm run start")}
 `;
 
+  const isNextJs = await checkIsInNextJsProject();
+
   const STEP_2 = `
   Import the component in your React frontend.
-  ${green(`import { AnalyticsPage } from "./${state.reactComponentDir}";`)}
+  ${green(getImportSnippet({ isNextJs, componentDir: state.reactComponentDir }))}
 
   Add the component to your page.
   ${green(`<AnalyticsPage />`)}
@@ -52,4 +56,19 @@ export const showPostSetupSteps: CliStepMethod = async state => {
   printWithPadding(green(SDK_LEARN_MORE_MESSAGE));
 
   return [{ type: "success" }, state];
+};
+
+export const getImportSnippet = ({
+  isNextJs,
+  componentDir,
+}: {
+  isNextJs: boolean;
+  componentDir?: string;
+}) => {
+  // Refer to https://www.metabase.com/docs/latest/embedding/sdk/next-js
+  if (isNextJs) {
+    return `const AnalyticsPage = dynamic(() => import("./${componentDir}/analytics-page"), { ssr: false });`;
+  }
+
+  return `import { AnalyticsPage } from "./${componentDir}";`;
 };
