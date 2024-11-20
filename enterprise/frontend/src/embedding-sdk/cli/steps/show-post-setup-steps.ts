@@ -79,7 +79,7 @@ export const getImportSnippet = ({
     const importPath = path.normalize(`../${componentDir}/analytics-page`);
 
     let snippets = "import dynamic from 'next/dynamic';";
-    snippets += `\n  const AnalyticsPage = dynamic(() => import(${importPath}), { ssr: false });`;
+    snippets += `\n  const AnalyticsPage = dynamic(() => import("${importPath}"), { ssr: false });`;
 
     return snippets;
   }
