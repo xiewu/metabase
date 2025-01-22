@@ -1,0 +1,101 @@
+--- a/test/metabase/db/metadata_queries_test.clj
++++ b/test/metabase/db/metadata_queries_test.clj
+@@ -37,31 +37,6 @@
+(deftest ^:parallel table-rows-sample-test
+   
+Added a test feature for opt in exclusion :test/table-rows-sample-test-feature)
+Can this be renamed to something better?
+From materialize: Shoud this test be skipped for drivers with :expressions disabled?
+Can we use :expressions instead of :test/table-rows-sample-test-feature?
+
+
+--- a/test/metabase/driver/sql_jdbc/sync/describe_table_test.clj
++++ b/test/metabase/driver/sql_jdbc/sync/describe_table_test.clj
+@@ -789,18 +789,20 @@
+(deftest describe-view-fields
+     
+There's already feature exclusion with ::describe-materialized-view-fields and ::describe-view-fields
+do the features just need to be made gloabl with :feature instead of local with ::feature?
+or does materialize just need to fix the test?
+     
+
+--- a/test/metabase/driver_test.clj
++++ b/test/metabase/driver_test.clj
+@@ -107,7 +107,7 @@
+(deftest can-connect-with-destroy-db-test
+       
+Seems like materialize can exclude themselves with :test/dynamic-dataset-loading?
+Or does materialize want a feature for (:redshift :snowfake :vertica) (assoc details :db (mt/random-name))?)
+
+
+@@ -146,7 +146,7 @@
+@@ -154,9 +154,9 @@
+(deftest check-can-connect-before-sync-test
+
+Seems like materialize can exclude themselves with :test/dynamic-dataset-loading?
+Or does materialize want a feature for (:redshift :snowfake :vertica) (assoc details :db (mt/random-name))?)
+
+ 
+--- a/test/metabase/query_processor_test/alternative_date_test.clj
++++ b/test/metabase/query_processor_test/alternative_date_test.clj
+@@ -448,16 +448,6 @@                        
+(deftest ^:parallel yyyymmddhhmmss-binary-dates
+                                       
+There's already feature exclusion with ::yyyymmddhhss-binary-timestamps 
+does the feature just need to be made global with :feature instead of ::feature? 
+or does materialize just need to fix the test?
+From materialize:
+org.postgresql.util.PSQLException: ERROR: function to_timestamp(text, unknown) does not exist
+Hint: No function matches the given name and argument types. You might need to add explicit type casts.
+So seems like they just need to fix the test?
+
+
+@@ -512,14 +502,3 @@
+(deftest ^:parallel yyyymmddhhmmss-dates
+  
+There's already feature exclusion with ::yyyymmddhhss-string-timestamps 
+does the feature just need to be made global with :feature instead of ::feature? 
+or does materialize just need to fix the test?)
+From materialize:
+org.postgresql.util.PSQLException: ERROR: function to_timestamp(text, unknown) does not exist
+Hint: No function matches the given name and argument types. You might need to add explicit type casts.
+So seems like they just need to fix the test?
+
+
+--- a/test/metabase/query_processor_test/date_bucketing_test.clj
++++ b/test/metabase/query_processor_test/date_bucketing_test.clj
+@@ -195,7 +195,7 @@
+(defmethod group-by-default-test-expected-rows :default
+
+Materialize is not in qp.test-util/tz-shifted-driver-bug? so the exclusion doesn't do anything here?
+Materialize is still using the :else results
+Do they just need to fix the tests?
+
+
+@@ -267,7 +267,7 @@
+(defmethod group-by-default-test-2-expected-rows :default
+
+Materialize is not in qp.test-util/tz-shifted-driver-bug? so the exclusion doesn't do anything here?
+Materialize is still using the :else results
+Do they just need to fix the tests?
+
+
+@@ -1270,7 +1270,7 @@
+(deftest ^:parallel count-of-grouping-test
+
+Also couldn't get these tests to pass locally?
+
+
+--- a/test/metabase/test/data/dataset_definition_test.clj
++++ b/test/metabase/test/data/dataset_definition_test.clj
+@@ -7,51 +7,8 @@
+(deftest dataset-with-custom-pk-test
+
+From materialize:
+This is the (deftest dataset-with-custom-pk-test test, judging by its name it sounds like should be excluded by default for drivers with :metadata/key-constraints?
+Why would we exclude metadata/key-constraints? arent they the only ones that should be tested?
+
+(deftest dataset-with-custom-composite-pk-test
+From materialize:
+This is the (deftest dataset-with-custom-pk-test test, judging by its name it sounds like should be excluded by default for drivers with :metadata/key-constraints?
+Why would we exclude metadata/key-constraints? arent they the only ones that should be tested?

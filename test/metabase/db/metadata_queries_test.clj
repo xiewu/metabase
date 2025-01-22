@@ -36,8 +36,12 @@
     (is (= 1000
            (metadata-queries/field-count (t2/select-one :model/Field :id (mt/id :checkins :venue_id)))))))
 
+(defmethod driver/database-supports? [::driver/driver :test/table-rows-sample-test-feature]
+  [driver _feature _database]
+  (contains? (sql-jdbc.tu/normal-sql-jdbc-drivers) driver))
+
 (deftest ^:parallel table-rows-sample-test
-  (mt/test-drivers (sql-jdbc.tu/normal-sql-jdbc-drivers)
+  (mt/test-drivers (mt/normal-drivers-with-feature :test/table-rows-sample-test-feature)
     (let [expected [["20th Century Cafe"]
                     ["25°"]
                     ["33 Taps"]
