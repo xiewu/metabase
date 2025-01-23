@@ -1,0 +1,45 @@
+# Reference: https://github.com/metabase/metabase/wiki/Metabase-Plugin-Manifest-Reference
+info:
+  name: Metabase Materialize Driver
+  version: 1.4.0
+  description: Allows Metabase to connect to Materialize.
+contact-info:
+  name: Materialize Inc.
+  email: devex@materialize.com
+driver:
+  name: materialize
+  display-name: Materialize
+  lazy-load: true
+  parent: postgres
+  connection-properties:
+    - name: host
+      display-name: Host
+      placeholder: name.materialize.cloud
+      helper-text: The Materialize region to connect to.
+    - merge:
+        - port
+        - default: 6875
+    - merge:
+        - dbname
+        - name: db
+          placeholder: materialize
+    - name: cluster
+      display-name: Cluster name
+      placeholder: quickstart
+      required: true
+      helper-text: Your Materialize cluster name.
+    - user
+    - password
+    - merge:
+        - ssl
+        - default: true
+    - name: schema-filters
+      type: schema-filters
+      display-name: Schemas
+    - advanced-options-start
+    - default-advanced-options
+init:
+  - step: load-namespace
+    namespace: metabase.driver.materialize
+  - step: register-jdbc-driver
+    class: org.postgresql.Driver

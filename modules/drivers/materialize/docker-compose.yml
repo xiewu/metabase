@@ -1,0 +1,36 @@
+---
+version: "3.9"
+
+services:
+  materialize:
+    image: materialize/materialized:latest
+    container_name: materialize
+    command:
+      - --availability-zone=test1
+      - --availability-zone=test2
+      - --bootstrap-role=materialize
+      - --system-parameter-default=max_tables=1000
+      - --system-parameter-default=max_connections=10000
+    environment:
+      MZ_NO_TELEMETRY: 1
+    ports:
+      - 6875:6875
+      - 6877:6877
+      - 6878:6878
+    healthcheck:
+      {
+        test: curl -f localhost:6878/api/readyz,
+        interval: 1s,
+        start_period: 35s,
+      }
+
+  metabase:
+    image: metabase/metabase:v0.52.6
+    container_name: metabase-with-materialize-driver
+    environment:
+      'MB_HTTP_TIMEOUT': '5000'
+      'JAVA_OPTS': '-Xms2g -Xmx4g -XX:+UseParallelGC'
+    ports:
+      - '3000:3000'
+    volumes:
+      - '../../../resources/modules/materialize.metabase-driver.jar:/plugins/materialize.jar'
