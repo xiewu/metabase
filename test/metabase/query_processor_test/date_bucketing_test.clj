@@ -193,7 +193,7 @@
   (cond
     ;; There's a bug here where we are reading in the UTC time as pacific, so we're 7 hours off
     ;; (This is fixed for Oracle now)
-    (and (qp.test-util/tz-shifted-driver-bug? driver) (not= driver :oracle))
+    (and (qp.test-util/tz-shifted-driver-bug? driver) (not= driver :oracle)) ;; just redshift
     [["2015-06-01T10:31:00-07:00" 1]
      ["2015-06-01T16:06:00-07:00" 1]
      ["2015-06-01T17:23:00-07:00" 1]

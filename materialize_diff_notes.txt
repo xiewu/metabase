@@ -8,6 +8,7 @@ Can this be renamed to something better?
 From materialize: Shoud this test be skipped for drivers with :expressions disabled?
 Can we use :expressions instead of :test/table-rows-sample-test-feature?
 
+see file
 
 --- a/test/metabase/driver/sql_jdbc/sync/describe_table_test.clj
 +++ b/test/metabase/driver/sql_jdbc/sync/describe_table_test.clj
@@ -17,7 +18,8 @@ Can we use :expressions instead of :test/table-rows-sample-test-feature?
 There's already feature exclusion with ::describe-materialized-view-fields and ::describe-view-fields
 do the features just need to be made gloabl with :feature instead of local with ::feature?
 or does materialize just need to fix the test?
-     
+
+verify above
 
 --- a/test/metabase/driver_test.clj
 +++ b/test/metabase/driver_test.clj
@@ -36,6 +38,24 @@ Seems like materialize can exclude themselves with :test/dynamic-dataset-loading
 Or does materialize want a feature for (:redshift :snowfake :vertica) (assoc details :db (mt/random-name))?)
 
  
+ provide features (not necessarily a feature, but something) to get these case: 
+ (case driver/*driver*
+    (:redshift :snowflake :vertica) (assoc details :db (mt/random-name))
+    :oracle                         (assoc details :service-name (mt/random-name))
+    :presto-jdbc                    (assoc details :catalog (mt/random-name)))
+ they still need to get the tests passing
+ maybe: (contains? #{:redshift :snowflake :vertica :presto-jdbc :oracle} driver/*driver*)
+ feature/property for "can not destroy db"
+
+(defmethod db-cannot-destroy-detail-key :materialize
+  [_driver]
+  :db)
+
+ (if-let [k (db-cannot-destroy-detail-key driver/*driver*)]
+  (update-in db [:details k] (random-name))
+  (destroy db))
+
+
 --- a/test/metabase/query_processor_test/alternative_date_test.clj
 +++ b/test/metabase/query_processor_test/alternative_date_test.clj
 @@ -448,16 +448,6 @@                        
@@ -49,6 +69,10 @@ org.postgresql.util.PSQLException: ERROR: function to_timestamp(text, unknown) d
 Hint: No function matches the given name and argument types. You might need to add explicit type casts.
 So seems like they just need to fix the test?
 
+exclude the test?
+track issue: change impl of def dataset so drivers can independently update natives map 
+respond and show example of how to opt out of something like ::yyyymmddhhss-binary-timestamps
+
 
 @@ -512,14 +502,3 @@
 (deftest ^:parallel yyyymmddhhmmss-dates
@@ -61,6 +85,10 @@ org.postgresql.util.PSQLException: ERROR: function to_timestamp(text, unknown) d
 Hint: No function matches the given name and argument types. You might need to add explicit type casts.
 So seems like they just need to fix the test?
 
+exclude the test?
+track issue: change impl of def dataset so drivers can independently update natives map 
+respond and show example of how to opt out of something like ::yyyymmddhhss-binary-timestamps
+
 
 --- a/test/metabase/query_processor_test/date_bucketing_test.clj
 +++ b/test/metabase/query_processor_test/date_bucketing_test.clj
@@ -71,6 +99,8 @@ Materialize is not in qp.test-util/tz-shifted-driver-bug? so the exclusion doesn
 Materialize is still using the :else results
 Do they just need to fix the tests?
 
+use (defmethod group-by-default-test-expected-rows to set their own test dataset
+
 
 @@ -267,7 +267,7 @@
 (defmethod group-by-default-test-2-expected-rows :default
@@ -79,12 +109,20 @@ Materialize is not in qp.test-util/tz-shifted-driver-bug? so the exclusion doesn
 Materialize is still using the :else results
 Do they just need to fix the tests?
 
+use (defmethod group-by-default-test-2-expected-rows to set their own test dataset
+
 
 @@ -1270,7 +1270,7 @@
 (deftest ^:parallel count-of-grouping-test
 
 Also couldn't get these tests to pass locally?
-
+not setting current/not locking the clock
+with-clock? sets now() to particular time (mocking)
+clock gets set correct the first run so it works, after waiting a minute it wont work?
+explain this to them (restart the repl to fix?)
+with-temporary-dataset, with-copy-of-
+get new copy of checkins:4-per-minute dataset with the above
+maybe not, tests could get slow
 
 --- a/test/metabase/test/data/dataset_definition_test.clj
 +++ b/test/metabase/test/data/dataset_definition_test.clj
@@ -94,6 +132,11 @@ Also couldn't get these tests to pass locally?
 From materialize:
 This is the (deftest dataset-with-custom-pk-test test, judging by its name it sounds like should be excluded by default for drivers with :metadata/key-constraints?
 Why would we exclude metadata/key-constraints? arent they the only ones that should be tested?
+
+key-constraints ~ foreign-keys
+
+find a way to exclude with the feature, confirm if it should be excluded
+
 
 (deftest dataset-with-custom-composite-pk-test
 From materialize:

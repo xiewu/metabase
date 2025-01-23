@@ -1,5 +1,6 @@
 (ns ^:mb/driver-tests metabase.db.metadata-queries-test
   (:require
+   [clojure.set :as set]
    [clojure.test :refer :all]
    [metabase.db.metadata-queries :as metadata-queries]
    [metabase.driver :as driver]
@@ -40,8 +41,21 @@
   [driver _feature _database]
   (contains? (sql-jdbc.tu/normal-sql-jdbc-drivers) driver))
 
+;; (doseq (sql-jdbc.tu/normal-sql-jdbc-drivers)
+;;   defmethod test/table-rows-sample-test-feature true)
+
+;; normal-jdbc - { druid, druid-jdbc } without initialization, not really
+;; 
+;; (mt/normal-drivers)
+
+;; normal-drivers({:parent, :features_included, :features_excluded})
+
+;; intersect normal-sql-jdbc-drivers with drivers-with-feature
+
+;; rework exactly how this exclusion is done ^^, verify expressions can be used/something more meaningful than test name
+
 (deftest ^:parallel table-rows-sample-test
-  (mt/test-drivers (mt/normal-drivers-with-feature :test/table-rows-sample-test-feature)
+  (mt/test-drivers (set/intersection (sql-jdbc.tu/normal-sql-jdbc-drivers) (mt/normal-drivers-with-feature :expressions))
     (let [expected [["20th Century Cafe"]
                     ["25°"]
                     ["33 Taps"]
