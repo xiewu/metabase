@@ -1077,8 +1077,8 @@
 
 (defmethod ->honeysql [:sql :substring]
   [driver [_ arg start length]]
-  (if length 
-    [:substring (->honeysql driver arg) (->honeysql driver start) (->honeysql driver length)] 
+  (if length
+    [:substring (->honeysql driver arg) (->honeysql driver start) (->honeysql driver length)]
     [:substring (->honeysql driver arg) (->honeysql driver start)]))
 
 (defmethod ->honeysql [:sql :length]

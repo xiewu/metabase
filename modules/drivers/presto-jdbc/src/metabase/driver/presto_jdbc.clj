@@ -49,8 +49,7 @@
                               :now                             true
                               :set-timezone                    true
                               :standard-deviation-aggregations true
-                              :metadata/key-constraints        false
-                              :test/table-rows-sample-test-feature false}]
+                              :metadata/key-constraints        false}]
   (defmethod driver/database-supports? [:presto-jdbc feature] [_driver _feature _db] supported?))
 
 ;;; Presto API helpers

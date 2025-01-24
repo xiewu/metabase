@@ -37,25 +37,8 @@
     (is (= 1000
            (metadata-queries/field-count (t2/select-one :model/Field :id (mt/id :checkins :venue_id)))))))
 
-(defmethod driver/database-supports? [::driver/driver :test/table-rows-sample-test-feature]
-  [driver _feature _database]
-  (contains? (sql-jdbc.tu/normal-sql-jdbc-drivers) driver))
-
-;; (doseq (sql-jdbc.tu/normal-sql-jdbc-drivers)
-;;   defmethod test/table-rows-sample-test-feature true)
-
-;; normal-jdbc - { druid, druid-jdbc } without initialization, not really
-;; 
-;; (mt/normal-drivers)
-
-;; normal-drivers({:parent, :features_included, :features_excluded})
-
-;; intersect normal-sql-jdbc-drivers with drivers-with-feature
-
-;; rework exactly how this exclusion is done ^^, verify expressions can be used/something more meaningful than test name
-
 (deftest ^:parallel table-rows-sample-test
-  (mt/test-drivers (set/intersection (sql-jdbc.tu/normal-sql-jdbc-drivers) (mt/normal-drivers-with-feature :expressions))
+  (mt/test-drivers  (sql-jdbc.tu/normal-sql-jdbc-drivers)
     (let [expected [["20th Century Cafe"]
                     ["25°"]
                     ["33 Taps"]
@@ -64,12 +47,16 @@
           table    (t2/select-one :model/Table :id (mt/id :venues))
           fields   [(t2/select-one :model/Field :id (mt/id :venues :name))]
           fetch   (fn [truncation-size]
-                    (->> (metadata-queries/table-rows-sample table fields (constantly conj)
+                    ;; (println "DRIVER" driver/*driver*) 
+                    (let [x(->> (metadata-queries/table-rows-sample table fields (constantly conj)
                                                              (when truncation-size
                                                                {:truncation-size truncation-size}))
                          ;; since order is not guaranteed do some sorting here so we always get the same results
                          (sort-by first)
-                         (take 5)))]
+                         (take 5))]
+                      ;; (println)
+                      ;; (println)
+                      x))]
       (is (= :type/Text (-> fields first :base_type)))
       (is (= expected (fetch nil)))
       (testing "truncates text fields (see #13288)"
