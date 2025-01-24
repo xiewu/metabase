@@ -301,15 +301,9 @@
 
 (defmethod sql.qp/->honeysql [:oracle :substring]
   [driver [_ arg start length]]
-  (let [x (if length
+  (if length
     [:substr (sql.qp/->honeysql driver arg) (sql.qp/->honeysql driver start) (sql.qp/->honeysql driver length)]
-    [:substr (sql.qp/->honeysql driver arg) (sql.qp/->honeysql driver start)])]
-      (println "SUBSTRING DRIVER" driver)
-    (println "ARG" (sql.qp/->honeysql driver arg) "START" (sql.qp/->honeysql driver start) "LENGTH" (sql.qp/->honeysql driver length))
-    (println "SQL IS" (honey.sql/format x))
-    (println)
-
-    x))
+    [:substr (sql.qp/->honeysql driver arg) (sql.qp/->honeysql driver start)]))
 
 (defmethod sql.qp/->honeysql [:oracle :concat]
   [driver [_ & args]]
