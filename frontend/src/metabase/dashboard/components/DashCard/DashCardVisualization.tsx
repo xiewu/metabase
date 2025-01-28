@@ -377,6 +377,7 @@ export function DashCardVisualization({
       onTogglePreviewing={onTogglePreviewing}
       onChangeCardAndRun={onChangeCardAndRun}
       onChangeLocation={onChangeLocation}
+      VISUALIZER_DATA={dashcard.visualization_settings?.visualization}
     />
   );
 }
