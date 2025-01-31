@@ -147,6 +147,7 @@
 
 ;; used for compatibility with drivers only implementing alter-columns-sql
 ;; remove when alter-columns-sql is deleted (v0.57+)
+#_{:clj-kondo/ignore [:deprecated-var]}
 (defmethod alter-table-columns-sql :default
   [driver table-name column-definitions & _opts]
   (alter-columns-sql driver table-name column-definitions))
@@ -156,6 +157,7 @@
 ;; a. get-method for superclass type calls still pick up this impl
 ;; b. existing specialisation of sql-jdbc should remain preferred when alter-table-column-sql is called
 ;; we can move this impl to alter-table-columns-sql when alter-columns-sql is deleted (v0.57+)
+#_{:clj-kondo/ignore [:deprecated-var]}
 (defmethod alter-columns-sql :sql-jdbc
   [driver table-name column-definitions]
   (with-quoting driver
@@ -166,5 +168,5 @@
                                                           [[:raw type-and-constraints]]
                                                           type-and-constraints))))
                                            column-definitions)}
-                       :quoted true
+                       :quoted  true
                        :dialect (sql.qp/quote-style driver)))))
