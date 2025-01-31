@@ -11,8 +11,20 @@ import { ForwardRefLink } from "metabase/core/components/Link";
 import { useUserAcknowledgement } from "metabase/hooks/use-user-acknowledgement";
 import * as Urls from "metabase/lib/urls";
 import { PLUGIN_COLLECTIONS } from "metabase/plugins";
-import { ActionIcon, Badge, Icon, Indicator, Menu, Tooltip } from "metabase/ui";
+import {
+  ActionIcon,
+  Badge,
+  Icon,
+  Indicator,
+  IndicatorBadge,
+  Menu,
+  MenuTargetWithIndicator,
+  MenuWithIndicatorProvider,
+  Tooltip,
+} from "metabase/ui";
 import type { Collection } from "metabase-types/api";
+import { useWindowEvent } from "@mantine/hooks";
+import { useKeyPressEvent } from "react-use";
 
 export interface CollectionMenuProps {
   collection: Collection;
@@ -48,13 +60,15 @@ export const CollectionMenu = ({
   const canMove =
     !isRoot && !isPersonal && canWrite && !isInstanceAnalyticsCustom;
 
-  const [hasSeenMenu, { ack: ackHasSeenMenu }] = useUserAcknowledgement(
-    "collection-menu",
-    true,
-  );
+  // const [hasSeenMenu, { ack: ackHasSeenMenu }] = useUserAcknowledgement(
+  //   "collection-menu",
+  //   true,
+  // );
 
-  const [hasSeenMoveToDashboard, { ack: ackHasMoveToDashboard }] =
+  const [hasSeenMoveToDashboard, { ack: ackHasMoveToDashboard, unack }] =
     useUserAcknowledgement("move-to-dashboard", true);
+
+  useKeyPressEvent("q", unack);
 
   const moveItems = [];
   const cleanupItems = [];
@@ -105,7 +119,10 @@ export const CollectionMenu = ({
         component={ForwardRefLink}
         to={`${url}/move-questions-dashboard`}
         rightSection={
-          !hasSeenMoveToDashboard && <Badge variant="light">New</Badge>
+          <IndicatorBadge userAckKey="move-to-dashboard" variant="light">
+            {console.log("look at meeee")}
+            New
+          </IndicatorBadge>
         }
         onClick={() => !hasSeenMoveToDashboard && ackHasMoveToDashboard()}
       >{t`Move questions into their dashboards`}</Menu.Item>,
@@ -129,20 +146,22 @@ export const CollectionMenu = ({
     return null;
   }
 
-  const showIndicator =
-    !hasSeenMenu &&
-    ((!hasSeenMoveToDashboard && hasDqCandidates) || showCleanupIndicator);
+  // const showIndicator =
+  //   !hasSeenMenu &&
+  //   ((!hasSeenMoveToDashboard && hasDqCandidates) || showCleanupIndicator);
 
   return (
-    <Menu
-      position="bottom-end"
-      onChange={() => {
-        if (!hasSeenMenu && showIndicator) {
-          ackHasSeenMenu();
-        }
-      }}
-    >
-      <Menu.Target>
+    <MenuWithIndicatorProvider>
+      <Menu
+        keepMounted
+        position="bottom-end"
+        // onChange={() => {
+        //   if (!hasSeenMenu && showIndicator) {
+        //     ackHasSeenMenu();
+        //   }
+        // }}
+      >
+        {/* <Menu.Target>
         <Indicator
           size={6}
           disabled={!showIndicator}
@@ -154,9 +173,18 @@ export const CollectionMenu = ({
             </ActionIcon>
           </Tooltip>
         </Indicator>
-      </Menu.Target>
+      </Menu.Target> */}
 
-      <Menu.Dropdown>{items}</Menu.Dropdown>
-    </Menu>
+        <MenuTargetWithIndicator>
+          <Tooltip label={t`Move, trash, and more...`} position="bottom">
+            <ActionIcon size={32} variant="viewHeader">
+              <Icon name="ellipsis" color="text-dark" />
+            </ActionIcon>
+          </Tooltip>
+        </MenuTargetWithIndicator>
+
+        <Menu.Dropdown>{items}</Menu.Dropdown>
+      </Menu>
+    </MenuWithIndicatorProvider>
   );
 };
