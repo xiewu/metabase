@@ -183,10 +183,8 @@ export function numberFormatterForOptions(options: FormatNumberOptionsType) {
 }
 
 function formatNumberCompact(value: number, options: FormatNumberOptionsType) {
-  const separators = options["number_separators"];
-
   if (options.number_style === "percent") {
-    return formatNumberCompactWithoutOptions(value * 100, separators) + "%";
+    return _formatNumberCompact(value * 100, options) + "%";
   }
   if (options.number_style === "currency") {
     try {
@@ -205,13 +203,11 @@ function formatNumberCompact(value: number, options: FormatNumberOptionsType) {
       const valueSign = value < 0 ? "-" : "";
 
       return (
-        valueSign +
-        currency +
-        formatNumberCompactWithoutOptions(Math.abs(value), separators)
+        valueSign + currency + _formatNumberCompact(Math.abs(value), options)
       );
     } catch (e) {
       // Intl.NumberFormat failed, so we fall back to a non-currency number
-      return formatNumberCompactWithoutOptions(value, separators);
+      return _formatNumberCompact(value, options);
     }
   }
   if (options.number_style === "scientific") {
@@ -222,10 +218,13 @@ function formatNumberCompact(value: number, options: FormatNumberOptionsType) {
       minimumFractionDigits: 1,
     });
   }
-  return formatNumberCompactWithoutOptions(value, separators);
+  return _formatNumberCompact(value, options);
 }
 
-function formatNumberCompactWithoutOptions(value: number, separators?: string) {
+function _formatNumberCompact(
+  value: number,
+  options: FormatNumberOptionsType = {},
+) {
   if (value === 0) {
     // 0 => 0
     return "0";
@@ -238,11 +237,17 @@ function formatNumberCompactWithoutOptions(value: number, separators?: string) {
   } else {
     // 1 => 1
     // 1000 => 1K
-    formatted = Humanize.compactInteger(Math.round(value), 1);
+    const isDefaultDecimalCount =
+      options.maximumFractionDigits ===
+      DEFAULT_NUMBER_OPTIONS.maximumFractionDigits;
+    formatted = Humanize.compactInteger(
+      Math.round(value),
+      isDefaultDecimalCount ? 1 : options.maximumFractionDigits,
+    );
   }
 
-  return separators !== DEFAULT_NUMBER_SEPARATORS
-    ? replaceNumberSeparators(formatted, separators)
+  return options?.number_separators !== DEFAULT_NUMBER_SEPARATORS
+    ? replaceNumberSeparators(formatted, options?.number_separators)
     : formatted;
 }
 
