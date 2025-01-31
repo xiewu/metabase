@@ -18,9 +18,9 @@ email-max-recipients-per-second: null
 embedding-homepage: null
 enable-embedding: null
 enable-nested-queries: null
+enable-pivoted-exports: null
 enable-sandboxes?: null
 enable-whitelabeling?: null
-enable-pivoted-exports: null
 enable-xrays: null
 hide-embed-branding?: null
 humanization-strategy: null
