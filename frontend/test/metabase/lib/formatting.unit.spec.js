@@ -130,6 +130,19 @@ describe("formatting", () => {
         expect(formatNumber(-99999999.9, options)).toEqual("-100,0M");
       });
 
+      it("should resepect 'decimals' setting", () => {
+        expect(formatNumber(500000, { compact: true, decimals: 0 })).toBe(
+          "500k",
+        );
+        expect(formatNumber(500000, { compact: true })).toBe("500.0k");
+        expect(formatNumber(10.1, { compact: true })).toBe("10.1");
+        expect(formatNumber(10.1, { compact: true, decimals: 0 })).toBe("10.1");
+        expect(formatNumber(99999999.9, { compact: true })).toBe("100.0M");
+        expect(formatNumber(99999999.9, { compact: true, decimals: 0 })).toBe(
+          "100M",
+        );
+      });
+
       it("should format percentages", () => {
         const options = { compact: true, number_style: "percent" };
         expect(formatNumber(0.867, { number_style: "percent" })).toEqual(
