@@ -202,10 +202,14 @@
          vec
          not-empty)))
 
+(defn- parameter->pMBQL [param]
+  (update-vals param ->pMBQL))
+
 (defmethod ->pMBQL :mbql.stage/mbql
   [stage]
   (let [aggregations (from-indexed-idents stage :aggregation :aggregation-idents)
         expr-idents  (:expression-idents stage)
+        parameters   (->> stage :parameters (mapv parameter->pMBQL) not-empty)
         expressions  (->> stage
                           :expressions
                           (mapv (fn [[k v]]
@@ -221,6 +225,7 @@
                       stage-source-card-id->pMBQL
                       (m/assoc-some :expressions expressions
                                     :aggregation aggregations
+                                    :parameters  parameters
                                     :breakout    (from-indexed-idents stage :breakout :breakout-idents)))
             stage (reduce
                    (fn [stage k]
