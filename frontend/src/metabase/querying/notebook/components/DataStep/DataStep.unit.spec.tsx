@@ -8,6 +8,7 @@ import {
   setupSearchEndpoints,
 } from "__support__/server-mocks";
 import { getIcon, renderWithProviders, screen, within } from "__support__/ui";
+import { createMockModelResult } from "metabase/browse/models/test-utils";
 import { METAKEY } from "metabase/lib/browser";
 import type { IconName } from "metabase/ui";
 import * as Lib from "metabase-lib";
@@ -73,6 +74,19 @@ const setup = ({
   setupDatabasesEndpoints([createSampleDatabase()]);
   setupSearchEndpoints([]);
   setupRecentViewsAndSelectionsEndpoints([], ["selections"]);
+
+  // In embedding SDK we call a different endpoint because we use a different data picker (metabase#52889)
+  if (isEmbeddingSdk) {
+    setupSearchEndpoints(
+      [
+        createMockModelResult({
+          id: 0,
+          name: "Products",
+        }),
+      ],
+      { overwriteRoutes: true },
+    );
+  }
 
   const storeInitialState = createMockState({
     embed: createMockEmbedState({ isEmbeddingSdk }),
