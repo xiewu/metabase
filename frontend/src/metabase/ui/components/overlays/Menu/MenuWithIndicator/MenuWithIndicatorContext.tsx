@@ -1,6 +1,7 @@
+import { Menu, type MenuProps } from "@mantine/core";
 import {
+  type PropsWithChildren,
   createContext,
-  PropsWithChildren,
   useCallback,
   useMemo,
   useState,
@@ -18,6 +19,14 @@ export const MenuWithIndicatorProvider = (props: PropsWithChildren) => {
   );
 };
 
+export const FYCMenu = (props: PropsWithChildren<MenuProps>) => {
+  return (
+    <MenuWithIndicatorProvider>
+      <Menu {...props} keepMounted></Menu>
+    </MenuWithIndicatorProvider>
+  );
+};
+
 const useMenuWithIndicator = () => {
   const [badges, setBadges] = useState<[string, boolean][]>([]);
 
@@ -29,16 +38,11 @@ const useMenuWithIndicator = () => {
   );
 
   const removeBadge = useCallback(({ key }: { key: string }) => {
-    setBadges(s => [...s.filter(([k]) => k === key)]);
+    setBadges(s => [...s.filter(([k]) => k !== key)]);
   }, []);
 
   const showIndicator =
-    badges.length > 0 && badges.every(([_, v]) => v === false);
-
-  console.log({
-    showIndicator,
-    badges,
-  });
+    badges.length > 0 && badges.some(([_, v]) => v === false);
 
   return useMemo(
     () => ({

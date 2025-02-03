@@ -1,6 +1,7 @@
-import { Indicator, Menu } from "metabase/ui";
+import { Indicator, Menu } from "@mantine/core";
+import { type PropsWithChildren, useContext } from "react";
+
 import { MenuWithIndicatorContext } from "./MenuWithIndicatorContext";
-import { PropsWithChildren, useContext } from "react";
 
 export const MenuTargetWithIndicator = (props: PropsWithChildren) => {
   const { showIndicator } = useContext(MenuWithIndicatorContext);

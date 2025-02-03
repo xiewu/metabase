@@ -8,23 +8,10 @@ import {
 } from "metabase/collections/utils";
 import { useHasDashboardQuestionCandidates } from "metabase/components/MoveQuestionsIntoDashboardsModal/hooks";
 import { ForwardRefLink } from "metabase/core/components/Link";
-import { useUserAcknowledgement } from "metabase/hooks/use-user-acknowledgement";
 import * as Urls from "metabase/lib/urls";
 import { PLUGIN_COLLECTIONS } from "metabase/plugins";
-import {
-  ActionIcon,
-  Badge,
-  Icon,
-  Indicator,
-  IndicatorBadge,
-  Menu,
-  MenuTargetWithIndicator,
-  MenuWithIndicatorProvider,
-  Tooltip,
-} from "metabase/ui";
+import { ActionIcon, Icon, Menu, Tooltip } from "metabase/ui";
 import type { Collection } from "metabase-types/api";
-import { useWindowEvent } from "@mantine/hooks";
-import { useKeyPressEvent } from "react-use";
 
 export interface CollectionMenuProps {
   collection: Collection;
@@ -59,16 +46,6 @@ export const CollectionMenu = ({
   const canWrite = collection.can_write;
   const canMove =
     !isRoot && !isPersonal && canWrite && !isInstanceAnalyticsCustom;
-
-  // const [hasSeenMenu, { ack: ackHasSeenMenu }] = useUserAcknowledgement(
-  //   "collection-menu",
-  //   true,
-  // );
-
-  const [hasSeenMoveToDashboard, { ack: ackHasMoveToDashboard, unack }] =
-    useUserAcknowledgement("move-to-dashboard", true);
-
-  useKeyPressEvent("q", unack);
 
   const moveItems = [];
   const cleanupItems = [];
@@ -106,26 +83,21 @@ export const CollectionMenu = ({
     );
   }
 
-  const { menuItems: cleanupMenuItems, showIndicator: showCleanupIndicator } =
+  const { menuItems: cleanupMenuItems } =
     PLUGIN_COLLECTIONS.useGetCleanUpMenuItems(collection);
 
   cleanupItems.push(...cleanupMenuItems);
 
   if (hasDqCandidates) {
     cleanupItems.push(
-      <Menu.Item
+      <Menu.FYCMenuItem
         key="collection-move-to-dashboards"
         icon={<Icon name="add_to_dash" />}
         component={ForwardRefLink}
         to={`${url}/move-questions-dashboard`}
-        rightSection={
-          <IndicatorBadge userAckKey="move-to-dashboard" variant="light">
-            {console.log("look at meeee")}
-            New
-          </IndicatorBadge>
-        }
-        onClick={() => !hasSeenMoveToDashboard && ackHasMoveToDashboard()}
-      >{t`Move questions into their dashboards`}</Menu.Item>,
+        userAckKey="move-to-dashboard"
+        badgeLabel={t`New`}
+      >{t`Move questions into their dashboards`}</Menu.FYCMenuItem>,
     );
   }
 
@@ -151,40 +123,16 @@ export const CollectionMenu = ({
   //   ((!hasSeenMoveToDashboard && hasDqCandidates) || showCleanupIndicator);
 
   return (
-    <MenuWithIndicatorProvider>
-      <Menu
-        keepMounted
-        position="bottom-end"
-        // onChange={() => {
-        //   if (!hasSeenMenu && showIndicator) {
-        //     ackHasSeenMenu();
-        //   }
-        // }}
-      >
-        {/* <Menu.Target>
-        <Indicator
-          size={6}
-          disabled={!showIndicator}
-          label={<span data-testid="indicator" />}
-        >
-          <Tooltip label={t`Move, trash, and more...`} position="bottom">
-            <ActionIcon size={32} variant="viewHeader">
-              <Icon name="ellipsis" color="text-dark" />
-            </ActionIcon>
-          </Tooltip>
-        </Indicator>
-      </Menu.Target> */}
+    <Menu.FYC position="bottom-end">
+      <Menu.TargetWithFYC>
+        <Tooltip label={t`Move, trash, and more...`} position="bottom">
+          <ActionIcon size={32} variant="viewHeader">
+            <Icon name="ellipsis" color="text-dark" />
+          </ActionIcon>
+        </Tooltip>
+      </Menu.TargetWithFYC>
 
-        <MenuTargetWithIndicator>
-          <Tooltip label={t`Move, trash, and more...`} position="bottom">
-            <ActionIcon size={32} variant="viewHeader">
-              <Icon name="ellipsis" color="text-dark" />
-            </ActionIcon>
-          </Tooltip>
-        </MenuTargetWithIndicator>
-
-        <Menu.Dropdown>{items}</Menu.Dropdown>
-      </Menu>
-    </MenuWithIndicatorProvider>
+      <Menu.Dropdown>{items}</Menu.Dropdown>
+    </Menu.FYC>
   );
 };
