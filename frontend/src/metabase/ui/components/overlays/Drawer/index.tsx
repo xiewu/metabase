@@ -8,7 +8,7 @@ export { getDrawerOverrides } from "./Drawer.styled";
 
 export type { DrawerProps } from "@mantine/core";
 
-const Drawer = function Drawer(props: MantineDrawerProps) {
+export const Drawer = function Drawer(props: MantineDrawerProps) {
   return (
     <PreventEagerPortal {...props}>
       <MantineDrawer {...props} />
@@ -24,5 +24,3 @@ Drawer.Header = MantineDrawer.Header;
 Drawer.Title = MantineDrawer.Title;
 Drawer.Body = MantineDrawer.Body;
 Drawer.NativeScrollArea = MantineDrawer.NativeScrollArea;
-
-export { Drawer };
