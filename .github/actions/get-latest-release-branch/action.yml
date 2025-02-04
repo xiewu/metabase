@@ -2,7 +2,7 @@ name: Get latest release branch
 
 outputs:
   branch-name:
-    value: ${{ steps.get-latest-release-branch.outputs.result }}
+    value: ${{ parseJson(steps.get-latest-release-branch.outputs.result) }}
 
 runs:
   using: "composite"
@@ -11,31 +11,15 @@ runs:
       id: get-latest-release-branch
       with:
         result-encoding: string
-        script: |
-          const releaseBranches = await github.rest.git.listMatchingRefs({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            ref: "heads/release-x.",
-          });
+        script: | # js
+          const currentVersion = Number(${{ vars.CURRENT_VERSION }});
 
-          const getVersionFromBranch = branch => {
-            const match = branch.match(/release-x\.(.*?)\.x$/);
-            return match && parseInt(match[1]);
+          const result =  {
+            latest: `release-x.${currentVersion}.x`,
+            secondLatest: `release-x.${currentVersion - 1}.x`,
+            thirdLatest: `release-x.${currentVersion - 2}.x`,
           };
-          const latestReleaseBranch = releaseBranches.data
-            .filter(branch => getVersionFromBranch(branch.ref) !== null)
-            .reduce(
-              (prev, current) =>
-                getVersionFromBranch(prev.ref) > getVersionFromBranch(current.ref)
-                  ? prev
-                  : current,
-              { ref: "" },
-            );
-          const latestReleaseBranchName = latestReleaseBranch.ref.replace(
-            /^refs\/heads\//,
-            "",
-          );
 
-          console.log(`Latest release branch: ${latestReleaseBranchName}`);
+          console.log(result);
 
-          return latestReleaseBranchName;
+          return result;
