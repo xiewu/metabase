@@ -1,8 +1,16 @@
-name: Get latest release branch
+name: Get latest release branches
+
+inputs:
+  current-version:
+    required: true
 
 outputs:
-  branch-name:
-    value: ${{ fromJson(steps.get-latest-release-branch.outputs.result) }}
+  latest:
+    value: ${{ fromJson(steps.get-latest-release-branch.outputs.result).latest }}
+  secondLatest:
+    value: ${{ fromJson(steps.get-latest-release-branch.outputs.result).secondLatest }}
+  thirdLatest:
+    value: ${{ fromJson(steps.get-latest-release-branch.outputs.result).thirdLatest }}
 
 runs:
   using: "composite"
@@ -12,7 +20,7 @@ runs:
       with:
         result-encoding: string
         script: | # js
-          const currentVersion = Number('${{ vars.CURRENT_VERSION }}');
+          const currentVersion = Number(${{ inputs.current-version }});
 
           const result =  {
             latest: `release-x.${currentVersion}.x`,
