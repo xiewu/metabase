@@ -8,10 +8,10 @@ jobs:
     # if: github.event.pull_request.merged == true && (contains(github.event.pull_request.labels.*.name, 'backport') || contains(github.event.pull_request.labels.*.name, 'double-backport') && github.event.action == 'closed' || github.event.label.name == 'backport' || github.event.label.name == 'double-backport')
     runs-on: ubuntu-22.04
     steps:
-      # - uses: actions/checkout@v4
-      #   with:
-      #     fetch-depth: 0
-      #     token: ${{ secrets.METABASE_AUTOMATION_USER_TOKEN }}
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.METABASE_AUTOMATION_USER_TOKEN }}
       - uses: ./.github/actions/find-squashed-commit
         name: Find commit
         id: find_commit
@@ -19,22 +19,25 @@ jobs:
           pull-request-number: ${{ github.event.pull_request.number }}
           base-ref: ${{ github.event.pull_request.base.ref }}
 
-      - uses: ./.github/actions/get-latest-release-branch
-        name: Get latest release branch
-        id: get_latest_release_branch
-        with:
-          current-version: ${{ vars.CURRENT_VERSION }}
-
-      # - name: Single Backport
-      #   uses: ./.github/actions/create-backport
+      # - uses: ./.github/actions/get-latest-release-branch
+      #   name: Get latest release branch
+      #   id: get_latest_release_branch
       #   with:
-      #     target-branch: ${{ steps.get_latest_release_branch.outputs.latest-release-branch }}
-      #     backport-branch: ${{ steps.find_commit.outputs.commit-sha }}
+      #     current-version: ${{ vars.CURRENT_VERSION }}
+
+      - name: Single Backport
+        uses: ./.github/actions/create-backport
+        with:
+          target-branch: ${{ steps.get_latest_release_branch.outputs.latest }}
+          # backport-commit: ${{ steps.find_commit.outputs.commit-sha }}
+          backport-commit: 0b54b32459e15b6e71c58c0c5a3f89f022c65558 # FIXME FOR TESTING
+          github-token: ${{ secrets.METABASE_AUTOMATION_USER_TOKEN }}
+          github-token-2: ${{ secrets.GITHUB_TOKEN }}
 
       # - name: Double Backport
       #   uses: ./.github/actions/create-backport
       #   if: contains(github.event.pull_request.labels.*.name, 'double-backport') || github.event.label.name == 'double-backport'
       #   with:
-      #     target-branch: ${{ steps.get_latest_release_branch.outputs.latest-release-branch }}
-      #     backport-branch: ${{ steps.find_commit.outputs.commit-sha }}
+      #     target-branch: ${{ steps.get_latest_release_branch.outputs.secondLatest }}
+      #     backport-commit: ${{ steps.find_commit.outputs.commit-sha }}
 
