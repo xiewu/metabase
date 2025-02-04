@@ -1,4 +1,4 @@
-name: Test database driver
+name: Create Backport PR
 
 inputs:
   target-branch:
