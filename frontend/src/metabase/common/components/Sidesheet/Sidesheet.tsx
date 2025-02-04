@@ -5,7 +5,7 @@ import { t } from "ttag";
 import { uniqueId } from "underscore";
 
 import Animation from "metabase/css/core/animation.module.css";
-import { Modal, Stack, Drawer, DrawerProps } from "metabase/ui";
+import { Drawer, type DrawerProps, Stack } from "metabase/ui";
 
 import Styles from "./sidesheet.module.css";
 
@@ -43,13 +43,19 @@ export function Sidesheet({
   const titleId = useMemo(() => uniqueId("sidesheet-title"), []);
 
   return (
-    <Drawer.Root position="right" opened={isOpen} h="100dvh" {...drawerProps}>
+    <Drawer.Root
+      transitionProps={{ duration: 0 }} // Transition is provided via css
+      position="right"
+      opened={isOpen}
+      h="100dvh"
+      {...drawerProps}
+    >
       {withOverlay && <Drawer.Overlay />}
       <Drawer.Content
         bg="bg-light"
         px="none"
         data-testid="sidesheet"
-        className={cx(Styles.SidesheetContent)}
+        className={cx(Styles.SidesheetContent, Animation.slideLeft)}
         aria-labelledby={titleId}
         w={sizes[size]}
       >
