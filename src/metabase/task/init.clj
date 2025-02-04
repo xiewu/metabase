@@ -17,6 +17,7 @@
    [metabase.task.search-index]
    [metabase.task.send-anonymous-stats]
    [metabase.task.send-pulses]
+   [metabase.task.session-cleanup]
    [metabase.task.task-history-cleanup]
    [metabase.task.truncate-audit-tables]
    [metabase.task.upgrade-checks]))
