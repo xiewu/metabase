@@ -19,11 +19,11 @@ jobs:
           pull-request-number: ${{ github.event.pull_request.number }}
           base-ref: ${{ github.event.pull_request.base.ref }}
 
-      # - uses: ./.github/actions/get-latest-release-branch
-      #   name: Get latest release branch
-      #   id: get_latest_release_branch
-      #   with:
-      #     current-version: ${{ vars.CURRENT_VERSION }}
+      - uses: ./.github/actions/get-latest-release-branch
+        name: Get latest release branch
+        id: get_latest_release_branch
+        with:
+          current-version: ${{ vars.CURRENT_VERSION }}
 
       - name: Single Backport
         uses: ./.github/actions/create-backport
