@@ -49,18 +49,18 @@ jobs:
         id: dependencies
         with:
           script: | # js
-            const {
-              getBuildRequirements,
-              getVersionFromReleaseBranch,
-            } = require('${{ github.workspace }}/release/dist/index.cjs');
-            const targetBranchName = '${{ github.base_ref || github.ref }}';
+            // const {
+            //   getBuildRequirements,
+            //   getVersionFromReleaseBranch,
+            // } = require('${{ github.workspace }}/release/dist/index.cjs');
+            // const targetBranchName = '${{ github.base_ref || github.ref }}';
 
-            const version = getVersionFromReleaseBranch(targetBranchName);
-            const requirements = getBuildRequirements(version);
+            // const version = getVersionFromReleaseBranch(targetBranchName);
+            // const requirements = getBuildRequirements(version);
 
             return {
-              java_version: requirements.java,
-              node_version: requirements.node,
+              java_version: 21, // FIXME
+              node_version: 18 // FIXME
             };
 
   build:
@@ -113,15 +113,15 @@ jobs:
         id: dependencies
         with:
           script: | # js
-            const { getSdkVersionFromReleaseBranchName } = require('${{ github.workspace }}/release/dist/index.cjs');
-            const branchName = '${{ github.base_ref || github.ref }}';
-
-            const sdk_version = await getSdkVersionFromReleaseBranchName({
-              github,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              branchName,
-            });
+            // const { getSdkVersionFromReleaseBranchName } = require('${{ github.workspace }}/release/dist/index.cjs');
+            // const branchName = '${{ github.base_ref || github.ref }}';
+            //
+            // const sdk_version = await getSdkVersionFromReleaseBranchName({
+            //   github,
+            //   owner: context.repo.owner,
+            //   repo: context.repo.repo,
+            //   branchName,
+            // });
 
             return {
               sdk_version: 52, // FIXME FOR TESTING
