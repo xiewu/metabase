@@ -5,7 +5,7 @@ on:
 
 jobs:
   create-backport:
-    if: github.event.pull_request.merged == true && (contains(github.event.pull_request.labels.*.name, 'backport') || contains(github.event.pull_request.labels.*.name, 'double-backport') && github.event.action == 'closed' || github.event.label.name == 'backport' || github.event.label.name == 'double-backport')
+    # if: github.event.pull_request.merged == true && (contains(github.event.pull_request.labels.*.name, 'backport') || contains(github.event.pull_request.labels.*.name, 'double-backport') && github.event.action == 'closed' || github.event.label.name == 'backport' || github.event.label.name == 'double-backport')
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
